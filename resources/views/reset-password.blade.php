@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Login Portal</title>
+<title>Reset Password - Langgeng Jaya</title>
 
 <style>
 * {
@@ -17,14 +17,12 @@ body {
     display: flex;
 }
 
-/* BAGIAN KIRI (GAMBAR) */
 .left {
     width: 50%;
     background: url('/images/Logo-Langgeng-Jaya.png') no-repeat center;
     background-size: cover;
 }
 
-/* BAGIAN KANAN */
 .right {
     width: 50%;
     display: flex;
@@ -33,22 +31,26 @@ body {
     background: linear-gradient(to right, #ffffff 2%, #3E7B27 98%);
 }
 
-/* CARD LOGIN */
 .login-box {
     width: 320px;
     text-align: center;
 }
 
-/* LOGO */
 .logo-text {
     font-size: 30px;
     font-weight: bold;
     color: #000000;
-    margin-bottom: 15px;
-    transform: translateY(-30px); 
+    margin-bottom: 8px;
+    transform: translateY(-30px);
 }
 
-/* INPUT */
+.subtitle {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 20px;
+    transform: translateY(-25px);
+}
+
 .input-group {
     margin-bottom: 15px;
     text-align: left;
@@ -57,6 +59,10 @@ body {
 .input-group label {
     font-size: 13px;
     color: #666;
+}
+
+.input-wrapper {
+    position: relative;
 }
 
 .input-group input {
@@ -68,61 +74,12 @@ body {
     outline: none;
 }
 
-.input-group input:focus {
-    border-color: #6c4ccf;
-}
-
-/* REMEMBER + BUTTON */
-.actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.actions label {
-    font-size: 12px;
-    color: #555;
-}
-
-.btn {
-    padding: 8px 16px;
-    border: none;
-    background: #00a8ff;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.btn:hover {
-    background: #0097e6;
-}
-
-/* LINK */
-.links {
-    margin-top: 15px;
-    font-size: 12px;
-    color: #777;
-}
-
-.links a {
-    display: block;
-    color: #555;
-    text-decoration: none;
-    margin-top: 5px;
-}
-
-.links a:hover {
-    text-decoration: underline;
-}
-
-/* WRAPPER INPUT + TOMBOL LIHAT */
-.input-wrapper {
-    position: relative;
-}
-
 .input-wrapper input {
     padding-right: 40px;
+}
+
+.input-group input:focus {
+    border-color: #6c4ccf;
 }
 
 .toggle-password {
@@ -143,20 +100,45 @@ body {
     color: #555;
 }
 
-/* STATUS & ERROR */
+.btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: #00a8ff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.btn:hover {
+    background: #0097e6;
+}
+
+.links {
+    margin-top: 15px;
+    font-size: 12px;
+    color: #777;
+}
+
+.links a {
+    display: block;
+    color: #555;
+    text-decoration: none;
+    margin-top: 5px;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
 .alert-danger p {
     color: #cc0000;
     font-size: 12px;
     margin-top: 8px;
 }
-
-.alert-success {
-    color: #2d6a2d;
-    font-size: 12px;
-    margin-bottom: 10px;
-}
 </style>
-
 </head>
 <body>
 
@@ -166,37 +148,39 @@ body {
     <div class="login-box">
 
         <div class="logo-text">Langgeng Jaya</div>
+        <div class="subtitle">Masukkan PIN baru kamu</div>
 
-        {{-- Pesan sukses kirim email reset --}}
-        @if (session('status'))
-            <div class="alert-success">
-                {{ session('status') }}
-            </div>
-        @endif
-
-        <form action="{{ route('loginFunction') }}" method="POST">
+        <form action="{{ route('password.update') }}" method="POST">
             @csrf
 
+            {{-- Token & email tersembunyi --}}
+            <input type="hidden" name="token" value="{{ $token }}">
+            <input type="hidden" name="email" value="{{ $email }}">
+
             <div class="input-group">
-                <label>Masukkan PIN</label>
+                <label>PIN Baru</label>
                 <div class="input-wrapper">
-                    <input type="password" inputmode="numeric" pattern="[0-9]*" name="password" id="pin-input" required placeholder="Masukkan Angka">
-                    <button type="button" class="toggle-password" onclick="togglePin()" id="toggle-btn" title="Lihat PIN">
-                        👁
-                    </button>
+                    <input type="password" inputmode="numeric" pattern="[0-9]*"
+                           name="password" id="pin-new" required>
+                    <button type="button" class="toggle-password"
+                            onclick="togglePin('pin-new','btn-new')" id="btn-new" title="Lihat PIN">👁</button>
                 </div>
             </div>
 
-            <div class="actions">
-                {{-- Remember Me --}}
-                <label>
-                    <input type="checkbox" name="remember"> Ingat Saya
-                </label>
-                <button type="submit" class="btn">Log In</button>
+            <div class="input-group">
+                <label>Konfirmasi PIN Baru</label>
+                <div class="input-wrapper">
+                    <input type="password" inputmode="numeric" pattern="[0-9]*"
+                           name="password_confirmation" id="pin-confirm" required>
+                    <button type="button" class="toggle-password"
+                            onclick="togglePin('pin-confirm','btn-confirm')" id="btn-confirm" title="Lihat PIN">👁</button>
+                </div>
             </div>
+
+            <button type="submit" class="btn">Simpan PIN Baru</button>
         </form>
 
-        {{-- Error messages --}}
+        {{-- Error --}}
         @if ($errors->any())
             <div class="alert-danger">
                 @foreach ($errors->all() as $error)
@@ -205,28 +189,27 @@ body {
             </div>
         @endif
 
-        {{-- Link forgot password --}}
         <div class="links">
-            <a href="{{ route('password.request') }}">Lupa Password?</a>
+            <a href="{{ route('login') }}">← Kembali ke Login</a>
         </div>
 
     </div>
 </div>
 
 <script>
-function togglePin() {
-    const input = document.getElementById('pin-input');
-    const btn   = document.getElementById('toggle-btn');
+function togglePin(inputId, btnId) {
+    const input = document.getElementById(inputId);
+    const btn   = document.getElementById(btnId);
     if (input.type === 'password') {
         input.type = 'text';
         input.inputMode = 'numeric';
-        btn.title = 'Sembunyikan PIN';
         btn.textContent = '🙈';
+        btn.title = 'Sembunyikan PIN';
     } else {
         input.type = 'password';
         input.inputMode = 'numeric';
-        btn.title = 'Lihat PIN';
         btn.textContent = '👁';
+        btn.title = 'Lihat PIN';
     }
 }
 </script>

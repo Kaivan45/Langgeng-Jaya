@@ -7,6 +7,14 @@ Route::get('/', function () {
     return view('login');
 })->name('login');
 
+   // Forgot password
+Route::get('/forgot-password', [App\Http\Controllers\LoginController::class, 'forgotPasswordForm'])->name('password.request');
+Route::post('/forgot-password', [App\Http\Controllers\LoginController::class, 'sendResetLink'])->name('password.email');
+
+    // Reset password
+Route::get('/reset-password/{token}', [App\Http\Controllers\LoginController::class, 'resetPasswordForm'])->name('password.reset');
+Route::post('/reset-password', [App\Http\Controllers\LoginController::class, 'resetPassword'])->name('password.update');
+
 Route::post('/login', [App\Http\Controllers\LoginController::class, 'login'])->name('loginFunction');
 
 Route::middleware('auth')->group(function () {
@@ -33,7 +41,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/kategori-barang/{id}', [App\Http\Controllers\KategoriBarangController::class, 'destroy'])->name('kategori-barang.destroy');
     Route::get('/kategori-barang/{id}', [App\Http\Controllers\KategoriBarangController::class, 'show'])->name('kategori-barang.show');
     Route::put('/kategori-barang/{id}', [App\Http\Controllers\KategoriBarangController::class, 'update'])->name('kategori-barang.update');
-
 
     Route::post('/logout', [App\Http\Controllers\LoginController::class, 'logout'])->name('logout');
 });
