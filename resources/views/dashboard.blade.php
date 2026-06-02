@@ -12,15 +12,14 @@
             border: 1px solid #ddd;
         }
 
-        /* NOTIF */
         .notif {
             margin-top: 15px;
-            height: 80px;
+            min-height: 80px;
             display: flex;
-            align-items: center;
             gap: 12px;
-            padding-left: 20px;
+            padding: 20px;
             color: #555;
+            align-items: flex-start;
         }
 
         .notif i {

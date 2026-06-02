@@ -159,7 +159,7 @@ input:focus {
                             <td>
                                <div class="action-buttons">
                                     <a href="{{ route('kategori-barang.show', $item->id) }}" class="btn-submit" style="background: #3E7B27;">
-                                        <i class="fa-solid fa-eye"></i> Edit
+                                        <i class="fa-solid fa-pen-to-square"></i> Edit
                                     </a>
 
                                     <form action="{{ route('kategori-barang.destroy', $item->id) }}" method="POST" class="form-delete">
